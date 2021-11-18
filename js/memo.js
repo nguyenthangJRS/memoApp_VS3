@@ -92,7 +92,8 @@ const delLocalStorage = () => {
                     }
                 }
                 viewStorage();
-                let w_msg = `LocalStorageから選択されている${w_cnt}件を削除(delete)しました。？`
+                let w_msg = `LocalStorageから選択されている${w_cnt}件を削除(delete)しました。`;
+                window.alert(w_msg);
             }
         }
     })
@@ -104,7 +105,6 @@ const delLocalStorage = () => {
             e.preventDefault();
             let w_sel = "0";
             w_sel = selectCheckBox();
-            console.log(w_sel);
             
             if (w_sel === "1") {
                 const key = document.querySelector('#textKey').value;
@@ -208,20 +208,19 @@ const notice_error = document.querySelector('.notice_wanning');
 const notice_succ = document.querySelector('.notice_success');
 const text_area = document.querySelectorAll('textarea');
 
-const notice_mes = (mes) => {
-    mes.querySelector('.notice').style.animation = `notice ${0.3}s ease-in  ${0.35}s forwards`;
+const notice_mes = (mes,delay) => {
+    mes.querySelector('.notice').style.animation = `notice ${1}s ease-in  ${delay}s forwards`;
     const time_down = setTimeout(() => {
         mes.classList.remove('show_notice');
         mes.querySelector('.notice').style.animation = `none`;
     }, 2000);
 }
 const notice_success = () => {
-    notice_mes(notice_succ);
+    notice_mes(notice_succ,1);
     notice_succ.classList.add('show_notice');
-
 }
 const notice_wanning = () => {
-    notice_mes(notice_error);
+    notice_mes(notice_error,0.35);
     notice_error.classList.add('show_notice');
 };
 //    check textarea is null funcion
