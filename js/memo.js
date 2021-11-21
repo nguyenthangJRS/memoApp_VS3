@@ -75,11 +75,11 @@ const viewStorage = () => {
 const delLocalStorage = () => {
     // 選んだものを削除薄る
     const deleteItem = document.querySelector('#deleteItem');
+    let w_cnt = 0;
     deleteItem.addEventListener('click',(e)=>{
         e.preventDefault();
         const chkbox1 = document.getElementsByName("checkbox1");
         const table1 = document.getElementById("table1");
-        let w_cnt = 0;
         w_cnt = selectCheckBox_mode("del");
     
     
@@ -94,24 +94,25 @@ const delLocalStorage = () => {
                 viewStorage();
                 let w_msg = `LocalStorageから選択されている${w_cnt}件を削除(delete)しました。`;
                 window.alert(w_msg);
+                document.querySelector("#textKey").value = "";
+                document.querySelector("#textMemo").value = "";
             }
-        }
+        } 
     })
 
     // 一つを削除する
     const del = document.querySelectorAll('.delItem');
-    del.forEach(item => {
+    del.forEach((item, index) => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
             let w_sel = "0";
             w_sel = selectCheckBox();
-            
             if (w_sel === "1") {
-                const key = document.querySelector('#textKey').value;
-                const value = document.querySelector('#textMemo').value;
-                localStorage.removeItem(key);
+                const key = table1.rows[index+1].cells[1].firstChild.data;
+                const value = table1.rows[index+1].cells[2].firstChild.data;
                 let w_delete = confirm(`LocalStorageに[${key} ${value}]を削除しますか？`);
                 if (w_delete === true) {
+                    localStorage.removeItem(key);
                     viewStorage();
                     let w_msg = `LocalStorageから${key} ${value}を削除(delete)しました！`;
                     window.alert(w_msg);
@@ -119,7 +120,7 @@ const delLocalStorage = () => {
                     document.querySelector("#textMemo").value = "";
                     location.reload(false);
                 }
-            }
+            } 
         })
     }), false
 }
@@ -159,33 +160,33 @@ const selectCheckBox_mode = (mode) =>{
     }
     if(mode === "del"){
         if(w_cnt >= 1) return w_cnt;
-        else  window.alert("1つを選択(select)してください");
+        else  window.alert("１つ以上、選択してください。");
     }
 }
 /////////////////////////////////
 const selectCheckBox = () => {
-        let w_sel = "0";
-        let w_cnt = 0;
-        const checkbox1 = document.getElementsByName('checkbox1');
-        const table1 = document.getElementById('table1');
-        let w_textKey = "";
-        let w_textMemo = "";
+    let w_sel = "0";
+    let w_cnt = 0;
+    const checkB = document.getElementsByName('checkbox1');
+    const table1 = document.getElementById('table1');
+    let w_textKey = "";
+    let w_textMemo = "";
 
-        for (let i = 0; i < checkbox1.length; i++) {
-            if (checkbox1[i].checked) {
-                if(w_cnt === 0){
-                    w_textKey = table1.rows[i+1].cells[1].firstChild.data;
-                    w_textMemo = table1.rows[i+1].cells[2].firstChild.data;
-                }
-                w_cnt++;
+    for (let i = 0; i < checkB.length; i++) {
+        if (checkB[i].checked) {
+            if(w_cnt === 0){
+                w_textKey = table1.rows[i+1].cells[1].firstChild.data;
+                w_textMemo = table1.rows[i+1].cells[2].firstChild.data;
             }
+            w_cnt++;
         }
-        document.querySelector('#textKey').value = w_textKey;
-        document.querySelector('#textMemo').value = w_textMemo;
-
-        if(w_cnt === 1) return w_sel = "1";
-        else  window.alert("1つを選択(select)してください");
     }
+    document.querySelector('#textKey').value = w_textKey;
+    document.querySelector('#textMemo').value = w_textMemo;
+
+    if(w_cnt === 1) return w_sel = "1";
+    else  window.alert("1つを選択(select)してください");
+}
     // clear all localstorage function
 const allClearLocalStorage = () => {
     const allClear = document.querySelector('#allClear');
