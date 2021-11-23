@@ -27,17 +27,20 @@ const saveLocalStorage = () => {
             notice_wanning();
         } else {
             localStorage.setItem(key, value);
-            let w_save = confirm(`LocalStorageに[${key} ${value}]を保存しますか？`);
+            let w_save = confirm(`LocalStorageに[${key}  ${value}]を保存しますか？`);
             if (w_save === true) {
                 viewStorage();
                 notice_success();
                 document.querySelector("#textKey").value = "";
                 document.querySelector("#textMemo").value = "";
-                location.reload(false);
+                setTimeout(()=>{
+                    location.reload(false);
+                },2000)
             }
         }
     }, false)
 };
+
 // viewStorage function 
 const viewStorage = () => {
     const list = document.querySelector('#list');
@@ -82,7 +85,6 @@ const delLocalStorage = () => {
         const table1 = document.getElementById("table1");
         w_cnt = selectCheckBox_mode("del");
     
-    
         if(w_cnt >= 1){
             let w_confirm = window.confirm(`LocalStorageから選択されている${w_cnt}件を削除(delete)しますか？`)
             if(w_confirm === true){
@@ -105,21 +107,17 @@ const delLocalStorage = () => {
     del.forEach((item, index) => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            let w_sel = "0";
-            w_sel = selectCheckBox();
-            if (w_sel === "1") {
-                const key = table1.rows[index+1].cells[1].firstChild.data;
-                const value = table1.rows[index+1].cells[2].firstChild.data;
-                let w_delete = confirm(`LocalStorageに[${key} ${value}]を削除しますか？`);
-                if (w_delete === true) {
-                    localStorage.removeItem(key);
-                    viewStorage();
-                    let w_msg = `LocalStorageから${key} ${value}を削除(delete)しました！`;
-                    window.alert(w_msg);
-                    document.querySelector("#textKey").value = "";
-                    document.querySelector("#textMemo").value = "";
-                    location.reload(false);
-                }
+            const key = table1.rows[index+1].cells[1].firstChild.data;
+            const value = table1.rows[index+1].cells[2].firstChild.data;
+            let w_delete = confirm(`LocalStorageに[${key} ${value}]を削除しますか？`);
+            if (w_delete === true) {
+                localStorage.removeItem(key);
+                viewStorage();
+                let w_msg = `LocalStorageから${key} ${value}を削除(delete)しました！`;
+                window.alert(w_msg);
+                document.querySelector("#textKey").value = "";
+                document.querySelector("#textMemo").value = "";
+                location.reload(false);
             } 
         })
     }), false
@@ -209,20 +207,17 @@ const notice_error = document.querySelector('.notice_wanning');
 const notice_succ = document.querySelector('.notice_success');
 const text_area = document.querySelectorAll('textarea');
 
-const notice_mes = (mes,delay) => {
-    mes.querySelector('.notice').style.animation = `notice ${1}s ease-in  ${delay}s forwards`;
+const notice_success = () => {
+    notice_succ.style.animation = `notice_sc ${1}s ease-in-out forwards`;
     const time_down = setTimeout(() => {
-        mes.classList.remove('show_notice');
-        mes.querySelector('.notice').style.animation = `none`;
+        notice_succ.style.animation = `none`;
     }, 2000);
 }
-const notice_success = () => {
-    notice_mes(notice_succ,1);
-    notice_succ.classList.add('show_notice');
-}
 const notice_wanning = () => {
-    notice_mes(notice_error,0.35);
-    notice_error.classList.add('show_notice');
+    notice_error.style.animation = `notice_sc ${1}s ease-in-out forwards`;
+    const time_down = setTimeout(() => {
+        notice_error.style.animation = `none`;
+    }, 2000);
 };
 //    check textarea is null funcion
 const check_textArea = (key, value) => {
